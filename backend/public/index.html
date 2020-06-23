@@ -1,0 +1,102 @@
+<?php phpinfo() ?>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>strapi test</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1>Strapi Sample</h1>
+
+    <div id="app">
+        <h2>Restaurants</h2>
+        <table class="table">
+            <tr v-for="restaurant in restaurants">
+                <th>id</th>
+                <th>name</th>
+                <th>description</th>
+                <th>created_at</th>
+                <th>updated_at</th>
+                <th>categories</th>
+            </tr>
+            <tr v-for="restaurant in restaurants">
+                <td>{{ restaurant.id }}</td>
+                <td>{{ restaurant.name }}</td>
+                <td>{{ restaurant.description }}</td>
+                <td>{{ restaurant.created_at }}</td>
+                <td>{{ restaurant.updated_at }}</td>
+                <td>
+                    <ul v-for="category in restaurant.categories">
+                        <li>{{ category.name }}</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="form">
+        <h2>Form Sample</h2>
+        <form action="./" method="POST">
+            <table class="table">
+                <tr>
+                    <th><label for="fName">Name</label></th>
+                    <td><input type="text" name="name" :value="name" id="fName" placeholder="Test Name" class="w-100"></td>
+                </tr>
+                <tr>
+                    <th><label form="fEmail">Email</label></th>
+                    <td><input type="email" name="email" :value="email" id="fEmail" placeholder="example@example.com" class="w-100"></td>
+                </tr>
+                <tr>
+                    <th><label form="fContent">Content</label></th>
+                    <td><textarea name="content" id="fContent" class="w-100" rows="5" :value="content"></textarea></td>
+                </tr>
+            </table>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">SUBMIT</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            api: 'http://192.168.0.178:1337/restaurants',
+            restaurants: []
+        },
+        methods: {
+            getRestaurants: function () {
+                axios.get(this.api)
+                    .then(function (response) {
+                        this.restaurants = response.data;
+                    }.bind(this))
+                    .catch(function (error) {
+                        console.error(error)
+                    }.bind(this))
+            }
+        },
+        mounted() {
+            this.getRestaurants()
+        }
+    })
+
+    const form = new Vue({
+        el: '#form',
+        data: function() {
+            return {
+                name: '',
+                email: '',
+                content: ''
+            }
+        }
+    })
+</script>
+
+</body>
+</html>
